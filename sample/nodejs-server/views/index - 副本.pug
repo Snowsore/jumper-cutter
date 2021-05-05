@@ -1,0 +1,33 @@
+head
+	meta(charset="utf-8")
+	meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+
+	link(rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css")
+
+	title Snowsore JumperCutter
+
+body(class="bg-dark")
+	div(class="d-flex flex-column h-100 align-items-center justify-content-around")
+		div
+			h1(class="text-light display-1" style="text-shadow:-10px -10px 20px #fff, 10px -10px 20px #fff, -10px 10px 20px #fff, 10px 10px 20px #fff;") JumperCutter
+		div(class="bg-light rounded p-3")
+			div(class="m-1")
+				form(method="POST" action="/")
+					input(type="text" class="form-control" name="url")
+			div(class="m-1")
+				form(method="POST" action="/youtube" enctype="multipart/form-data")
+					input(type="file" class="form-control-file" name="video")
+			div(class="m-1")
+				button(id="submit" class="btn btn-dark form-control") Submit
+		div(class="d-flex align-content-start flex-wrap justify-content-center")
+			each file in files
+					a(class='card text-center bg-secondary w-25 m-4'  href=`mp4/${file}`)
+						div(class='card-body')
+							video(class='w-100' src=`mp4/${file}`)=file
+							p(class='card-text text-white')=file
+		div
+			h1(class="text-light font-italic") by Snowsore
+
+script(src="/node_modules/jquery/dist/jquery.min.js")
+script(src="/node_modules/@popperjs/core/dist/umd/popper.min.js")
+script(src="/node_modules/bootstrap/dist/js/bootstrap.min.js")
