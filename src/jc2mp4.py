@@ -17,17 +17,16 @@ from moviepy.editor import *
 # Voice detection
 #
 
-# Preper
+# Prepare
 ifile = sys.argv[1]
 ofile = sys.argv[2]
-sensitivity = 200
+sensitivity = 300
 
 out, _ = (ffmpeg
     .input(ifile)
     .output('pipe:', format='wav', loglevel='panic')
     .run(capture_stdout=True)
 )
-# Get datan
 
 # Get data
 q = len(out) - 8
@@ -41,7 +40,7 @@ sample_rate, data = read(io.BytesIO(out[:4] + bytes(b) + out[8:]))
 # Sensetive
 mask = (data[:,0] > sensitivity) | (data[:,0] < -sensitivity)
 
-# Dum filtering
+# Dumb filtering
 dynamic = 0
 release = 0
 for i in range(100):
@@ -57,7 +56,7 @@ for i in range(100):
             mask = np.logical_or(mask, np.roll(mask, 2 ** l))
         break
     release += 2 ** i;
-    
+
 # Output list
 mask = np.insert(mask, 0, 0)
 mask = np.append(mask, 0)
@@ -79,5 +78,5 @@ clip = VideoFileClip(ifile)
 clips = []
 for i in progressbar.progressbar(range(len(audio_start))):
     clips.append(clip.subclip(audio_start[i], audio_stop[i]))
-    
+
 concatenate_videoclips(clips).write_videofile(ofile, codec='mp4', ffmpeg_params=['-c:v', 'h264_nvenc', '-c:a', 'aac', '-vf', 'setpts=0.666*PTS', '-af', 'atempo=1.5', '-f', 'mp4'])
